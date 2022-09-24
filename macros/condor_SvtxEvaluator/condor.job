@@ -1,0 +1,13 @@
+Universe 	       = vanilla
+Initialdir  	   = /sphenix/u/hjheng/Documents/MVTXalignment/macros
+Executable 	       = $(Initialdir)/production_SvtxEvaluator.sh
+PeriodicHold       = (NumJobStarts>=1 && JobStatus == 1)
+request_memory     = 48GB
+Priority           = 20
+job_lease_duration = 3600
+Output  	       = $(Initialdir)/condor_SvtxEvaluator/condor_SvtxEvaluator.out
+Error              = $(Initialdir)/condor_SvtxEvaluator/condor_SvtxEvaluator.err
+Log  		       = $(Initialdir)/condor_SvtxEvaluator/condor_SvtxEvaluator.log
+nEvents            = 1000
+Arguments          = "$(nEvents)"
+Queue 1

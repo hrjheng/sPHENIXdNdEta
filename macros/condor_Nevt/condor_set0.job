@@ -1,0 +1,16 @@
+Universe 	       = vanilla
+Initialdir  	   = /sphenix/user/hjheng/MVTXalignment/macros
+Executable 	       = $(Initialdir)/production_Nevt.sh
+PeriodicHold       = (NumJobStarts>=1 && JobStatus == 1)
+request_memory     = 48GB
+Priority           = 20
+job_lease_duration = 3600
+nEvents            = 2000
+InputfilelistIdx   = 0
+FileName           = MVTXRecoClusters_NoPileup_Nevt2000_v2
+skipEvt            = 0
+Output  	       = $(Initialdir)/condor_Nevt/condor_out/out/condor_Nevt_0.out
+Error              = $(Initialdir)/condor_Nevt/condor_out/err/condor_Nevt_0.err
+Log  		       = $(Initialdir)/condor_Nevt/condor_out/log/condor_Nevt_0.log
+Arguments          = "$(nEvents) $(InputfilelistIdx) $(FileName) $(skipEvt)"
+Queue 1

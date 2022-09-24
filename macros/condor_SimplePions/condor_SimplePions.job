@@ -1,0 +1,16 @@
+Universe 	       = vanilla
+Initialdir  	   = /sphenix/u/hjheng/Documents/MVTXalignment/macros
+Executable 	       = $(Initialdir)/production.sh
+PeriodicHold       = (NumJobStarts>=1 && JobStatus == 1)
+request_memory     = 48GB
+Priority           = 20
+job_lease_duration = 3600
+nEvents            = NEVENTS
+nParticles         = NPARTICLES
+vtxZmean           = VTXZMEAN
+vtxZwidth          = VTXZWIDTH
+Output  	       = $(Initialdir)/condor_SimplePions/condor_out/out/condor_simplepions_vtxZmeanVTXZMEANcm_vtxZwidthVTXZWIDTHcm.out
+Error              = $(Initialdir)/condor_SimplePions/condor_out/err/condor_simplepions_vtxZmeanVTXZMEANcm_vtxZwidthVTXZWIDTHcm.err
+Log  		       = $(Initialdir)/condor_SimplePions/condor_out/log/condor_simplepions_vtxZmeanVTXZMEANcm_vtxZwidthVTXZWIDTHcm.log
+Arguments          = "$(nEvents) $(nParticles) $(vtxZmean) $(vtxZwidth)"
+Queue 1
