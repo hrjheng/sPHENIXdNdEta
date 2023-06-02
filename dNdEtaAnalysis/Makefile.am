@@ -28,7 +28,8 @@ libdNdEtaAnalyzer_la_LDFLAGS = \
   -L$(OFFLINE_MAIN)/lib \
   -I$(ROOTSYS)/include \
   -lfun4all \
-  -lg4eval
+  -lg4eval \ 
+  -lcentrality_io
 
 BUILT_SOURCES = testexternals.cc
 
