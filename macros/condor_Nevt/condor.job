@@ -1,5 +1,5 @@
 Universe 	       = vanilla
-Initialdir  	   = /sphenix/u/hjheng/Documents/MVTXalignment/macros
+Initialdir  	   = /sphenix/user/hjheng/sPHENIXdNdEta/macros/
 Executable 	       = $(Initialdir)/production_Nevt.sh
 PeriodicHold       = (NumJobStarts>=1 && JobStatus == 1)
 request_memory     = 48GB
