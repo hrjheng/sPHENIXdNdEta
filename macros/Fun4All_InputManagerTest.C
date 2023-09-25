@@ -15,7 +15,7 @@
 #include <G4_DSTReader.C>
 #include <G4_Global.C>
 #include <G4_HIJetReco.C>
-#include <G4_Input_mod1.C>
+#include <G4_Input.C>
 #include <G4_Jets.C>
 #include <G4_KFParticle.C>
 #include <G4_ParticleFlow.C>
@@ -33,14 +33,8 @@
 #include <phool/PHRandomSeed.h>
 #include <phool/recoConsts.h>
 
-
-R__LOAD_LIBRARY(libg4detectors.so)
-R__LOAD_LIBRARY(libtrack_reco.so)
 R__LOAD_LIBRARY(libfun4all.so)
-R__LOAD_LIBRARY(libg4dst.so)
-// R__LOAD_LIBRARY(libg4eval.so)
-// R__LOAD_LIBRARY(libFROG.so)
-R__LOAD_LIBRARY(libmvtxhitfile.so) // I don't know why I need to add this...
+R__LOAD_LIBRARY(libffamodules.so)
 
 // For HepMC Hijing
 // try inputFile = /sphenix/sim/sim01/sphnxpro/sHijing_HepMC/sHijing_0-12fm.dat
@@ -49,39 +43,29 @@ int Fun4All_InputManagerTest(const int nEvents = 1, const int skip = 0)
 {
     bool runDisplay = false;
 
-    gSystem->Load("libFROG.so");
-    FROG *fr = new FROG();
-
     Fun4AllServer *se = Fun4AllServer::instance();
     se->Verbosity(INT_MAX);
+
+    Input::READHITS = true;
 
     // Opt to print all random seed used for debugging reproducibility. Comment out to reduce stdout prints.
     PHRandomSeed::Verbosity(1);
 
     const vector<string> &filelist = {
-        "/sphenix/u/hjheng/Documents/MVTXalignment/macros/list/dst_trkr_g4hit.list",
-        // "/sphenix/u/hjheng/Documents/MVTXalignment/macros/list/dst_truth.list",
-        // "/sphenix/u/hjheng/Documents/MVTXalignment/macros/list/dst_trkr_hit.list",
-        // "/sphenix/u/hjheng/Documents/MVTXalignment/macros/list/dst_tracks.list",
-        // "/sphenix/u/hjheng/Documents/MVTXalignment/macros/list/dst_vertex.list",
-        // "/sphenix/u/hjheng/Documents/MVTXalignment/macros/list/g4hits.list",
+        "/sphenix/user/hjheng/sPHENIXdNdEta/macros/list/clustertest/dst_calo_cluster.list",
+        "/sphenix/user/hjheng/sPHENIXdNdEta/macros/list/clustertest/dst_trkr_hit.list",
+        "/sphenix/user/hjheng/sPHENIXdNdEta/macros/list/clustertest/dst_truth.list",
+        "/sphenix/user/hjheng/sPHENIXdNdEta/macros/list/clustertest/g4hits.list",
+        "/sphenix/user/hjheng/sPHENIXdNdEta/macros/list/clustertest/dst_tracks.list",
+        "/sphenix/user/hjheng/sPHENIXdNdEta/macros/list/clustertest/dst_trkr_cluster.list"
     };
 
     for (unsigned int i = 0; i < filelist.size(); ++i)
     {
-        string mgrname = "DSTin" + to_string(i);
-        Fun4AllInputManager *in = new Fun4AllDstInputManager(mgrname);
-        in->AddListFile(filelist[i]);
-        in->Verbosity(INT_MAX);
-        se->registerInputManager(in);
+        INPUTREADHITS::listfile[i] = filelist[i];
     }
 
-    // if we use a negative number of events we go back to the command line here
-    if (nEvents < 0)
-    {
-        return 0;
-    }
-
+    TrackingInit();
 
     se->skip(skip);
     se->run(nEvents);

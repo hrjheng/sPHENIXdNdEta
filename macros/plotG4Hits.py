@@ -20,32 +20,37 @@ def SetPalette():
                                       array ("d", [0.00, 1.00, 0.82]),
                                       255,  1.0)
 
-def pypowarray(numpyvec, pow):
-    return numpyvec**pow
-
 if __name__ == '__main__':
 
-    # plotpath = './plot_MVTXhits/'
-    # plotpath = './plot_CheckClusSimplePion/'
-    # plotpath = './plot_CheckClus_listtype3/'
-    plotpath = './plot_MVTXRecoClusters_v2/'
-    # plotpath = './plot_MVTXRecoClusters_SimplePions/'
+    # plotpath = './plot/plot_MVTXRecoClusters_v2/'
+    # plotpath = './plot/plot_MVTXRecoClusters_HijingMBwoPU_private/'
+    # plotpath = './plot/plot_SIMPLE50Pions_VtxZmean0cm_VtxZwidth0cm_pTmin0.1GeV_pTmax20.0GeV/'
+    plotpath = './plot/plot_NoPileup_Nevt500_ana325private/'
     os.makedirs(plotpath, exist_ok=True)
+    os.makedirs(plotpath+'event/', exist_ok=True)
+
+    NevtToRun = 10
+    evtdisplay = True
 
     # SetPalette()
 
     # df = ROOT.RDataFrame('EventTree', '/sphenix/user/hjheng/TrackletAna/data/MVTXRecoClusters/MVTXRecoClusters_SIMPLE5000Pions_VtxZmean0cm_VtxZwidth0cm.root')
-    df = ROOT.RDataFrame('EventTree', '/sphenix/user/hjheng/TrackletAna/data/MVTXRecoClusters/MVTXRecoClusters_NoPileup_Nevt2000_v2.root')
+    # df = ROOT.RDataFrame('EventTree', '/sphenix/user/hjheng/TrackletAna/data/MVTXRecoClusters/MVTXRecoClusters_NoPileup_Nevt2000_v3.root')
+    # df = ROOT.RDataFrame('EventTree', '/sphenix/user/hjheng/TrackletAna/data/MVTXRecoClusters/HijingMBwoPU_private/MVTXRecoClusters_HijingMBwoPU_private.root')
+    df = ROOT.RDataFrame('EventTree', '/sphenix/user/hjheng/TrackletAna/data/MVTXRecoClusters/MVTXRecoClusters_NoPileup_Nevt500_ana325private.root')
     # df = df.Filter("TruthPV_trig_z < 2.5 && TruthPV_trig_z > -2.5")
     hM_hitx = df.Histo1D(("hM_hitx", " ", 40, -10, 10), "ClusX")
     # hM_hitz = df.Define("Layer1ClusZ", "ClusZ[ClusLayer==0]").Histo1D(("hM_hitz", " ", 60, -15, 15), "Layer1ClusZ")
     hM_hitz = df.Histo1D(("hM_hitz", " ", 60, -15, 15), "ClusZ")
     hM_G4Hitpos = df.Histo2D(("hM_G4Hitpos", " ", 10000, -100, 100, 10000, -100, 100), "HitX", "HitY")
     hM_G4HitR_G4HitZ = df.Define("G4HitR", "sqrt(HitX*HitX+HitY*HitY)").Define("MVTX_G4HitR","G4HitR[G4HitR<5]").Define("MVTX_G4HitZ","HitZ[G4HitR<5]").Histo2D(("hM_G4HitR_G4HitZ", " ", 120, 2, 5, 600, -15, 15), "MVTX_G4HitR", "MVTX_G4HitZ")
+    hM_G4Hitpos3d = df.Histo3D(("hM_G4Hitpos3d", " ", 240, -6, 6, 240, -6, 6, 40, -10, 10), "HitX", "HitY", "HitZ")
+    # hM_G4Hitpos3d_evt = df.Filter("event == 1").Histo3D(("hM_G4Hitpos3d_evt", " ", 240, -6, 6, 240, -6, 6, 40, -10, 10), "HitX", "HitY", "HitZ")
     hM_TruthPV_trig_z = df.Histo1D(("hM_TruthPV_trig_z", " ", 50, -25, 25), "TruthPV_trig_z")
     hM_TruthPV_trig_XvsY = df.Histo2D(("hM_TruthPV_trig_XvsY", " ", 100, -0.1, 0.1, 100, -0.1, 0.1), "TruthPV_trig_x", "TruthPV_trig_y")
     hM_TruthPV_trig_XYZpos = df.Histo3D(("hM_TruthPV_trig_XYZpos", " ", 100, -1, 1, 100, -1, 1, 1000, -25, 25), "TruthPV_trig_x", "TruthPV_trig_y", "TruthPV_trig_z")
     hM_hitpos3d = df.Histo3D(("hM_hitpos3d", " ", 240, -6, 6, 240, -6, 6, 40, -10, 10), "ClusX", "ClusY", "ClusZ")
+    # hM_hitpos3d_evt = df.Filter("event == 1").Histo3D(("hM_hitpos3d_evt", " ", 240, -6, 6, 240, -6, 6, 40, -10, 10), "ClusX", "ClusY", "ClusZ")
     hM_hitpos = df.Define("Layer1ClusX", "ClusX[ClusLayer==0]").Define("Layer1ClusY", "ClusY[ClusLayer==0]").Histo2D(("hM_hitpos", " ", 1200, -6, 6, 1200, -6, 6), "Layer1ClusX", "Layer1ClusY")
     hM_ClusEta_ClusZSize = df.Define("Layer1ClusEta", "ClusEta[ClusLayer==0]").Define("Layer1ClusZSize", "ClusZSize[ClusLayer==0]").Histo2D(("hM_ClusEta_ClusZSize", " ", 120, -3, 3, 20, 0, 20), "Layer1ClusEta", "Layer1ClusZSize")
     hM_ClusEta_ClusAdc = df.Define("Layer1ClusEta", "ClusEta[ClusLayer==0]").Define("Layer1ClusAdc", "ClusAdc[ClusLayer==0]").Histo2D(("hM_ClusEta_ClusAdc", " ", 120, -3, 3, 20, 0, 20), "Layer1ClusEta", "Layer1ClusAdc")
@@ -117,7 +122,72 @@ if __name__ == '__main__':
     c.SaveAs(plotpath+"hitpos.pdf")
     c.SaveAs(plotpath+"hitpos.png")
 
-    
+    if evtdisplay:
+        for i in range(NevtToRun):
+            hM_G4Hitpos3d_evt = df.Filter("event == {}".format(i)).Histo3D(("hM_G4Hitpos3d_evt", " ", 240, -6, 6, 240, -6, 6, 80, -20, 20), "HitX", "HitY", "HitZ")
+            hM_HitfromG4Ppos3d_evt = df.Filter("event == {}".format(i)).Histo3D(("hM_HitfromG4Ppos3d_evt", " ", 240, -6, 6, 240, -6, 6, 80, -20, 20), "HitfromG4P_X", "HitfromG4P_Y", "HitfromG4P_Z")
+            hM_hitpos3d_evt = df.Filter("event == {}".format(i)).Histo3D(("hM_hitpos3d_evt", " ", 240, -6, 6, 240, -6, 6, 80, -20, 20), "ClusX", "ClusY", "ClusZ")
+            c.cd()
+            gPad.SetRightMargin(0.15)
+            gPad.SetTopMargin(0.08)
+            gPad.SetLeftMargin(0.12)
+            gPad.SetBottomMargin(0.15)
+            hM_G4Hitpos3d_evt.GetXaxis().SetTitle('x (cm)')
+            hM_G4Hitpos3d_evt.GetYaxis().SetTitle('y (cm)')
+            hM_G4Hitpos3d_evt.GetZaxis().SetTitle('z (cm)')
+            hM_G4Hitpos3d_evt.SetMarkerSize(0.5)
+            hM_G4Hitpos3d_evt.SetMarkerColorAlpha(1, 0.2)
+            hM_G4Hitpos3d_evt.Draw()
+            hM_hitpos3d_evt.SetMarkerSize(0.5)
+            hM_hitpos3d_evt.SetMarkerColorAlpha(46, 0.8)
+            hM_hitpos3d_evt.Draw('same')
+            leg = TLegend(0.5, 0.8, 0.89, 0.91)
+            leg.SetTextSize(0.04)
+            leg.SetFillStyle(0)
+            hM_G4Hit_dummy = TH3F("hM_G4Hit_dummy", "hM_G4Hit_dummy", 240, -6, 6, 240, -6, 6, 40, -10, 10)
+            hM_G4Hit_dummy.Fill(1,1,1)
+            hM_G4Hit_dummy.SetMarkerColor(1)
+            hM_G4Hit_dummy.SetMarkerSize(1)
+            hM_RecoClus_dummy = TH3F("hM_RecoClus_dummy", "hM_RecoClus_dummy", 240, -6, 6, 240, -6, 6, 40, -10, 10)
+            hM_RecoClus_dummy.Fill(1,1,1)
+            hM_RecoClus_dummy.SetMarkerColor(46)
+            hM_RecoClus_dummy.SetMarkerSize(1)
+            leg.AddEntry(hM_G4Hit_dummy, "G4 hit", "p")
+            leg.AddEntry(hM_RecoClus_dummy, "Reco cluster", "p")
+            leg.Draw()
+            c.RedrawAxis()
+            c.SaveAs(plotpath+"event/G4hit_Clus_pos_evt{}.pdf".format(i))
+            c.SaveAs(plotpath+"event/G4hit_Clus_pos_evt{}.png".format(i))
+
+            c.cd 
+            gPad.SetRightMargin(0.15)
+            gPad.SetTopMargin(0.08)
+            gPad.SetLeftMargin(0.12)
+            gPad.SetBottomMargin(0.15)
+            hM_G4Hitpos3d_evt.GetXaxis().SetTitle('x (cm)')
+            hM_G4Hitpos3d_evt.GetYaxis().SetTitle('y (cm)')
+            hM_G4Hitpos3d_evt.GetZaxis().SetTitle('z (cm)')
+            hM_G4Hitpos3d_evt.SetMarkerSize(0.5)
+            hM_G4Hitpos3d_evt.SetMarkerColorAlpha(1, 0.2)
+            hM_G4Hitpos3d_evt.Draw()
+            hM_HitfromG4Ppos3d_evt.SetMarkerSize(0.5)
+            hM_HitfromG4Ppos3d_evt.SetMarkerColorAlpha(38, 0.8)
+            hM_HitfromG4Ppos3d_evt.Draw('same')
+            leg = TLegend(0.5, 0.8, 0.89, 0.91)
+            leg.SetTextSize(0.04)
+            leg.SetFillStyle(0)
+            hM_HitfromG4P_dummy = TH3F("hM_HitfromG4P_dummy", "hM_HitfromG4P_dummy", 240, -6, 6, 240, -6, 6, 40, -10, 10)
+            hM_HitfromG4P_dummy.Fill(1,1,1)
+            hM_HitfromG4P_dummy.SetMarkerColor(38)
+            hM_HitfromG4P_dummy.SetMarkerSize(1)
+            leg.AddEntry(hM_G4Hit_dummy, "G4 hit", "p")
+            leg.AddEntry(hM_HitfromG4P_dummy, "G4 hit from G4 particle", "p")
+            leg.Draw()
+            c.RedrawAxis()
+            c.SaveAs(plotpath+"event/G4hit_HitfromG4P_pos_evt{}.pdf".format(i))
+            c.SaveAs(plotpath+"event/G4hit_HitfromG4P_pos_evt{}.png".format(i))
+            del hM_G4Hitpos3d_evt, hM_hitpos3d_evt, hM_HitfromG4Ppos3d_evt, hM_G4Hit_dummy, hM_RecoClus_dummy, hM_HitfromG4P_dummy
+
     c.cd()
     # gPad.SetTheta(90)
     # gPad.SetPhi(0)
