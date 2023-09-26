@@ -315,7 +315,7 @@ void dNdEtaINTT::GetRecoClusterInfo(PHCompositeNode *topNode)
     // Reference:
     // https://github.com/sPHENIX-Collaboration/coresoftware/blob/master/simulation/g4simulation/g4eval/SvtxEvaluator.cc#L1731-L1984
     // for (const auto &hitsetkey : dst_clustermap->getHitSetKeys())
-    for (const auto &hitsetkey : dst_clustermap->getHitSetKeys(TrkrDefs::mvtxId))
+    for (const auto &hitsetkey : dst_clustermap->getHitSetKeys(TrkrDefs::inttId))
     {
         auto range = dst_clustermap->getClusters(hitsetkey);
         for (auto iter = range.first; iter != range.second; ++iter)
@@ -434,7 +434,7 @@ void dNdEtaINTT::GetTruthPVInfo(PHCompositeNode *topNode)
 
     std::map<int, unsigned int> vertex_cluster_count;
     vertex_cluster_count.clear();
-    for (const auto &hitsetkey : dst_clustermap->getHitSetKeys(TrkrDefs::mvtxId))
+    for (const auto &hitsetkey : dst_clustermap->getHitSetKeys(TrkrDefs::inttId))
     {
         auto range = dst_clustermap->getClusters(hitsetkey);
         for (auto iter = range.first; iter != range.second; ++iter)
